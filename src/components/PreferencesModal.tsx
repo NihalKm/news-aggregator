@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Drawer, Stack } from '@mui/material';
+import { Button, Divider, Drawer, IconButton, Stack, Tab, Tabs } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import { getPreferences } from './UtilityFunctions.ts';
-import { ToggleComponent } from './CommonComponents.tsx';
+import { ToggleComponent, TabPanel } from './CommonComponents.tsx';
+import { ArrowBack, Newspaper, Draw, Category, SaveAs } from '@mui/icons-material';
 interface PreferencesModalProps {
   open: boolean;
   onClose: () => void;
@@ -14,6 +15,7 @@ const PreferencesModal: React.FC<PreferencesModalProps> = React.memo(({ open, on
   const [selectedSources, setSelectedSources] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
   const [selectedAuthors, setSelectedAuthors] = useState<string[]>([]);
+  const [selectedTab, setSelectedTab] = useState<number>(0);
 
   // Hardcoded authors for preferences
   const availableAuthors = [
@@ -90,43 +92,58 @@ const PreferencesModal: React.FC<PreferencesModalProps> = React.memo(({ open, on
   }, [])
 
   return (
-    <Drawer PaperProps={{ sx: { borderRadius: "0px 0px 30px 30px" } }} anchor={"top"} open={open} onClose={onClose}>
-      <Stack style={{ padding: '20px', borderBottom: '4px solid #3d3b3b', borderRadius: "30px" }}>
-        <h2>Customize Your Feed</h2>
-        {/* Sources */}
-        <h4 style={{ margin: "8px 0px" }}>Sources</h4>
-        <Stack flexDirection={"column"} flexWrap={"wrap"} gap={"1rem"}>
-          {
-            availableSources.map((source, idx) => (
-              <ToggleComponent key={idx} label={source} value={selectedSources.includes(source)} name={JSON.stringify({ item: source, setFunction: "setSelectedSources" })} onChange={handleChange} />
-            ))
-          }
+    <Drawer PaperProps={{ sx: { borderRadius: "0px 0px 30px 30px", width: { md:"70%" }, left: { md:"15%" } } }} anchor={"top"} open={open} onClose={onClose}>
+      <Stack divider={<Divider orientation="horizontal" flexItem />}>
+        <Stack justifyContent={"space-between"} flexDirection="row" >
+          <IconButton onClick={onClose}>
+            <ArrowBack />
+          </IconButton>
+          <h2 style={{ textAlign: "center", flex:1, color:"#9d8f8f" }}>Customize Your Feed</h2>
         </Stack>
-
-        {/* Categories */}
-        <h4 style={{ margin: "8px 0px" }}>Categories</h4>
-        <Stack flexDirection={"column"} flexWrap={"wrap"} textTransform={"capitalize"} gap={"1rem"}>
-          {
-            availableCategories.map((category, idx) => (
-              <ToggleComponent key={idx} label={category} value={selectedCategory.includes(category)} name={JSON.stringify({ item: category, setFunction: "setSelectedCategory" })} onChange={handleChange} />
-            ))
-          }
-        </Stack>
-
-        {/* Authors */}
-        <h4 style={{ margin: "8px 0px" }}>Authors</h4>
-        <Stack flexDirection={"column"} flexWrap={"wrap"} gap={"1rem"}>
-          {
-            availableAuthors.map((author, idx) => (
-              <ToggleComponent key={idx} label={author} value={selectedAuthors.includes(author)} name={JSON.stringify({ item: author, setFunction: "setSelectedAuthors" })} onChange={handleChange} />
-            ))
-          }
-        </Stack>
-
-        <Stack sx={{ width: "100%", alignItems: "center", mt: 2 }}>
-          <Button variant="contained" sx={{ width: { xs: "100%", sm: "50%" }, background: "#828b93" }} onClick={handleSave} startIcon={<SaveIcon />} >
-            Save
-          </Button>
+        <Stack style={{ padding: '0px 20px 12px', borderBottom: '4px solid #3d3b3b', borderRadius: "30px" }}>
+          <Tabs TabIndicatorProps={{ style: { backgroundColor: "#8c5f5f" } }} value={selectedTab} onChange={(e, newValue) => setSelectedTab(newValue)} variant="fullWidth">
+            <Tab sx={{textTransform:"capitalize", '&.Mui-selected':{color: "#aa6d6d"}, '&:focus':{ color: "#aa6d6d"}}} icon={<Newspaper sx={{ '@media (max-width: 500px)':{ fontSize: "1rem"} }} />} label="Source" />
+            <Tab sx={{textTransform:"capitalize", '&.Mui-selected':{color: "#aa6d6d"}, '&:focus':{ color: "#aa6d6d"}}} icon={<Category sx={{ '@media (max-width: 500px)':{ fontSize: "1rem"} }} />} label="Category" />
+            <Tab sx={{textTransform:"capitalize", '&.Mui-selected':{color: "#aa6d6d"}, '&:focus':{ color: "#aa6d6d"}}} icon={<Draw sx={{ '@media (max-width: 500px)':{ fontSize: "1rem"} }} />} label="Author" />
+          </Tabs>
+          <TabPanel value={selectedTab} index={0} >
+            {/* Sources */}
+            {/* <h4 style={{ margin: "8px 0px" }}>Sources</h4> */}
+            <Stack flexDirection={"column"} flexWrap={"wrap"} gap={"1rem"}>
+              {
+                availableSources.map((source, idx) => (
+                  <ToggleComponent key={idx} label={source} value={selectedSources.includes(source)} name={JSON.stringify({ item: source, setFunction: "setSelectedSources" })} onChange={handleChange} />
+                ))
+              }
+            </Stack>
+          </TabPanel>
+          <TabPanel value={selectedTab} index={1} >
+            {/* Categories */}
+            {/* <h4 style={{ margin: "8px 0px" }}>Categories</h4> */}
+            <Stack flexDirection={"column"} flexWrap={"wrap"} textTransform={"capitalize"} gap={"1rem"}>
+              {
+                availableCategories.map((category, idx) => (
+                  <ToggleComponent key={idx} label={category} value={selectedCategory.includes(category)} name={JSON.stringify({ item: category, setFunction: "setSelectedCategory" })} onChange={handleChange} />
+                ))
+              }
+            </Stack>
+          </TabPanel>
+          <TabPanel value={selectedTab} index={2} >
+            {/* Authors */}
+            {/* <h4 style={{ margin: "8px 0px" }}>Authors</h4> */}
+            <Stack flexDirection={"column"} flexWrap={"wrap"} gap={"1rem"}>
+              {
+                availableAuthors.map((author, idx) => (
+                  <ToggleComponent key={idx} label={author} value={selectedAuthors.includes(author)} name={JSON.stringify({ item: author, setFunction: "setSelectedAuthors" })} onChange={handleChange} />
+                ))
+              }
+            </Stack>
+          </TabPanel>
+          <Stack sx={{ width: "100%", alignItems: "center", mt: 2 }}>
+            <IconButton size='medium' onClick={handleSave}  >
+              <SaveAs sx={{ color:"#9d8f8f", fontSize: { xs: "1.5rem", sm: "2rem" }}}/>
+            </IconButton>
+          </Stack>
         </Stack>
       </Stack>
     </Drawer>

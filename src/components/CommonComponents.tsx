@@ -1,5 +1,5 @@
 import React from 'react';
-import { Checkbox, FormControl, ListItemText, MenuItem, Select, InputBase, SwitchProps, Switch, FormControlLabel } from '@mui/material';
+import { Checkbox, FormControl, ListItemText, MenuItem, Select, InputBase, SwitchProps, Switch, FormControlLabel, Box, Typography } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -20,6 +20,13 @@ interface ToggleComponentProps {
   value: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name?: string;
+}
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  value: number;
+  index: number;
+  [key: string]: any;
 }
 
 const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = React.memo(({ options, selectedValue, onSelectChange, itemType }) => {
@@ -193,11 +200,31 @@ const IOSSwitch = styled((props: SwitchProps) => (
 const ToggleComponent: React.FC<ToggleComponentProps> = React.memo((props) => {
   const { label, value, onChange, name } = props;
   return (
-    <FormControlLabel name={name} key={label} label={label}
+    <FormControlLabel sx={{gap:1}} name={name} key={label} label={label}
       control={<IOSSwitch onChange={onChange}
         checked={value} value={label} size="small" />}
     />
   )
 });
 
-export { MultiSelectDropdown, SearchBar, IOSSwitch, ToggleComponent };
+const TabPanel: React.FC<TabPanelProps> = React.memo((props) => {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+})
+
+export { MultiSelectDropdown, SearchBar, IOSSwitch, ToggleComponent, TabPanel };
