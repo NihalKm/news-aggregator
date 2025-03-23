@@ -1,5 +1,5 @@
 import React from 'react';
-import { Checkbox, FormControl, ListItemText, MenuItem, Select, InputBase, SwitchProps, Switch, FormControlLabel, Box, Typography } from '@mui/material';
+import { Checkbox, FormControl, ListItemText, MenuItem, Select, InputBase, SwitchProps, Switch, FormControlLabel, Box, Typography, Stack } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -13,6 +13,7 @@ interface MultiSelectDropdownProps {
 interface SearchBarProps {
   searchTerm: string;
   onSearch: (value: string) => void;
+  onEnterClick?: () => void;
 }
 
 interface ToggleComponentProps {
@@ -39,7 +40,8 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = React.memo(({ op
         multiple
         displayEmpty
         renderValue={(selected) => {
-          return selected.length === 0 ? (itemType ? `Select ${itemType}` : "Select") : selected.length === options.length ? "All Selected" : (selected as string[]).map(item => item.charAt(0).toUpperCase() + item.slice(1)).join(', ')
+          let selOptions = selected.filter((item: string) => options.includes(item));
+          return selOptions.length === 0 ? (itemType ? `Select ${itemType}` : "Select") : selOptions.length === options.length ? "All Selected" : (selOptions as string[]).map(item => item.charAt(0).toUpperCase() + item.slice(1)).join(', ')
         }}
         onChange={(e) => {
           var { target: { value }, } = e;
@@ -122,7 +124,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const SearchBar: React.FC<SearchBarProps> = React.memo(({ searchTerm, onSearch }) => {
+const SearchBar: React.FC<SearchBarProps> = React.memo(({ searchTerm, onSearch, onEnterClick }) => {
   return (
     <Search>
       <SearchIconWrapper>
@@ -131,6 +133,11 @@ const SearchBar: React.FC<SearchBarProps> = React.memo(({ searchTerm, onSearch }
       <StyledInputBase
         placeholder="Search…"
         value={searchTerm}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            onEnterClick?.();
+          }
+        }}
         onChange={(e) => onSearch(e.target.value)}
         inputProps={{ 'aria-label': 'search' }}
       />
@@ -201,7 +208,7 @@ const IOSSwitch = styled((props: SwitchProps) => (
 const ToggleComponent: React.FC<ToggleComponentProps> = React.memo((props) => {
   const { label, value, onChange, name } = props;
   return (
-    <FormControlLabel sx={{gap:1}} name={name} key={label} label={label}
+    <FormControlLabel sx={{ gap: 1 }} name={name} key={label} label={label}
       control={<IOSSwitch onChange={onChange}
         checked={value} value={label} size="small" />}
     />
@@ -226,6 +233,17 @@ const TabPanel: React.FC<TabPanelProps> = React.memo((props) => {
       )}
     </div>
   );
-})
+});
 
-export { MultiSelectDropdown, SearchBar, IOSSwitch, ToggleComponent, TabPanel };
+const TitleComponent: React.FC<{ icon: React.ReactElement; title: string }> = React.memo(({ icon, title }) => {
+  return (
+    <Stack flexDirection="row" alignItems="center" gap={1}>
+      {icon}
+      <Typography noWrap variant="h6" component="div" sx={{ color: "#1f1f29ab", flexGrow: 1, fontSize: { xs: "1rem", sm: "1.25rem" }, fontWeight: { xs: "bold" } }}>
+        {title}
+      </Typography>
+    </Stack>
+  )
+});
+
+export { MultiSelectDropdown, SearchBar, IOSSwitch, ToggleComponent, TabPanel, TitleComponent };
