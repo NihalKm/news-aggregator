@@ -26,6 +26,7 @@ interface TabPanelProps {
   children?: React.ReactNode;
   value: number;
   index: number;
+  boxSx?: { [key: string]: any; };
   [key: string]: any;
 }
 
@@ -208,7 +209,7 @@ const ToggleComponent: React.FC<ToggleComponentProps> = React.memo((props) => {
 });
 
 const TabPanel: React.FC<TabPanelProps> = React.memo((props) => {
-  const { children, value, index, ...other } = props;
+  const { children, value, index, boxSx, ...other } = props;
 
   return (
     <div
@@ -219,7 +220,7 @@ const TabPanel: React.FC<TabPanelProps> = React.memo((props) => {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: 3, ...boxSx }}>
           <Typography>{children}</Typography>
         </Box>
       )}

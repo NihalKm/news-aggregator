@@ -1,4 +1,4 @@
-const getPreferences = (availableSources:string[]) => {
+const getPreferences = (availableSources: string[]) => {
   const storedPreferences = localStorage.getItem("preferences") || "{}";
   const parsedPreferences = JSON.parse(storedPreferences);
   //To set default sources if no preferences are stored

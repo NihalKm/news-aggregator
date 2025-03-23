@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { Divider, Drawer, Stack, AppBar, Box, Toolbar, IconButton, Typography } from '@mui/material';
+import { Stack, AppBar, Box, Toolbar, IconButton, Typography } from '@mui/material';
 import { NewsCard, NewsCardSkeleton } from '../components/NewsCard.tsx';
-import { Tune, Newspaper, ArrowBack, CalendarMonth } from '@mui/icons-material';
+import { Tune, Newspaper, CalendarMonth } from '@mui/icons-material';
 import { MultiSelectDropdown, SearchBar } from '../components/CommonComponents.tsx';
 import PreferencesModal from '../components/PreferencesModal.tsx';
 import { getPreferences } from '../components/UtilityFunctions.ts';
-import { fetchGuardianData, fetchNewsApiData, fetchNYTData } from '../api/fetchAggregatedData.ts';
+import { fetchGuardianData, fetchNewsApiData, fetchNYTData } from '../service/fetchAggregatedData.ts';
 import { DateRangeDrawer, DateSelectionType } from '../components/DateRangeDrawer.tsx';
 
 const HomePage: React.FC = () => {
@@ -2856,12 +2856,12 @@ const HomePage: React.FC = () => {
         if (gotPersonilisedData) {
             fetchData(source, currentCategory, undefined);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debouncedSearchTerm, gotPersonilisedData]);
 
     // Filter data whenever filters change
     useEffect(() => {
         try {
-            console.log(currentCategory, source, articles, selectionRange)
             var result: any[] = [];
             // Filter based on sources and categories
             articles.forEach((article) => {
@@ -2898,7 +2898,7 @@ const HomePage: React.FC = () => {
         } catch (err) {
         } finally {
         }
-    }, [currentCategory, source, selectionRange, articles, source, authors, currentCategory]);
+    }, [selectionRange, articles, source, authors, currentCategory]);
 
     const handleSelect = useCallback((ranges: { selection: DateSelectionType }) => {
         setSelectionRange({ ...ranges.selection });
