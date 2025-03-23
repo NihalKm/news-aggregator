@@ -28,10 +28,10 @@ const NewsCard: React.FC<NewsCardProps> = (props) => {
                 style={{ flex: 1, height: "calc(100% - 8px)", margin: "4px", borderRadius: '4px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }}
             />
             <Stack sx={{ flex: 1, minHeight: "100px", width: "100%", overflow: "hidden", padding: "4px", '@media (max-width: 500px)': { width: "calc(100% - 8px)" } }}>
-                <Typography variant="h6" component="div" sx={{ padding: "2px", lineHeight: "1.2", color: "#5a3d3d", flexGrow: 1, fontSize: { xs: "0.75rem", md: "0.8rem", lg: "1rem" }, fontWeight: { xs: "bold" }, overflow: "hidden", textOverflow: "ellipsis" }}>
+                <Typography variant="h6" component="div" sx={{ padding: "2px", lineHeight: "1.2", color: "#5a3d3d", flexGrow: 1, fontSize: { xs: "0.75rem", md: "0.8rem" }, fontWeight: { xs: "bold" }, overflow: "hidden", textOverflow: "ellipsis" }}>
                     {title}
                 </Typography>
-                <Typography variant="h6" component="div" sx={{ padding: "2px", lineHeight: "1.2", color: "#5a3d3d", flexGrow: 1, fontSize: { xs: "0.65rem", md: "0.7rem", lg: "0.9rem" }, fontWeight: { xs: "100" }, overflow: "hidden", textOverflow: "ellipsis" }}>
+                <Typography variant="h6" component="div" sx={{ padding: "2px", lineHeight: "1.2", color: "#5a3d3d", flexGrow: 1, fontSize: { xs: "0.65rem", md: "0.7rem" }, fontWeight: { xs: "100" }, overflow: "hidden", textOverflow: "ellipsis" }}>
                     {subtitle}
                 </Typography>
                 <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
